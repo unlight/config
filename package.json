@@ -1,6 +1,6 @@
 {
   "name": "@iamthes/ngx-config",
-  "version": "0.2.0-rc.4",
+  "version": "1.0.0",
   "description": "Configuration utility for Angular",
   "repository": {
     "type": "git",
