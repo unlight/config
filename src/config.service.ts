@@ -31,4 +31,17 @@ export class ConfigService {
 
     return this.settings[group][key];
   }
+
+  get(path: string, defaultValue?: any): any;
+  get(path: string[], defaultValue?: any): any;
+
+  get(path: any, defaultValue: any = null): any {
+    if (!Array.isArray(path)) {
+      path = String(path).split('.');
+    }
+    let result = path.reduce((prev: any, curr: string) => {
+      return prev && prev[curr];
+    }, this.settings);
+    return (result !== undefined) ? result : defaultValue;
+  }
 }

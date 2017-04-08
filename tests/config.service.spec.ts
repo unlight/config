@@ -1,5 +1,5 @@
 // angular
-import { inject } from '@angular/core/testing';
+import { async, inject } from '@angular/core/testing';
 
 // module
 import { ConfigLoader, ConfigStaticLoader, ConfigService } from '../index';
@@ -85,5 +85,40 @@ describe('@nglibs/config:',
                     .toThrowError('No setting found with the specified group/key [system/workingTheme]!');
                 });
             }));
+
+        describe('get method', () => {
+
+          let config: ConfigService;
+
+          beforeEach(async(() => {
+            config = inject([ConfigService], ($: any) => $)();
+            config.loader.loadSettings();
+          }));
+
+          it('smoke test', () => {
+            expect(config).toBeDefined();
+          });
+
+          it('should work properly when path is string', () => {
+            let result = config.get('i18n.locale');
+            expect(result).toEqual('en');
+          });
+
+          it('should work properly when path is string array', () => {
+            let result = config.get(['i18n', 'locale']);
+            expect(result).toEqual('en');
+          });
+
+          it('default value for unexisting path string', () => {
+            let result = config.get('foo.bar', 'baz');
+            expect(result).toEqual('baz');
+          });
+
+          it('default value for unexisting path string', () => {
+            let result = config.get(['x', 'xx'], 'baz');
+            expect(result).toEqual('baz');
+          });
+
+        });
       });
   });
