@@ -8,7 +8,7 @@ get(path: string[], defaultValue?: any): any;
 INSTALL
 ---
 ```
-npm install --save @iamthes/ngx-config
+npm install --save ngx-config
 ```
 
 ORIGINAL README
