@@ -5,6 +5,10 @@ Fork of https://github.com/nglibs/config
 get(path: string, defaultValue?: any): any;
 get(path: string[], defaultValue?: any): any;
 ```
+* Added pipe config:
+```
+<span id="property">{{'some.setting' | config}}</span>
+```
 INSTALL
 ---
 ```

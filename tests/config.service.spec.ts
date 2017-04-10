@@ -114,7 +114,7 @@ describe('@nglibs/config:',
             expect(result).toEqual('baz');
           });
 
-          it('default value for unexisting path string', () => {
+          it('default value for unexisting path array', () => {
             let result = config.get(['x', 'xx'], 'baz');
             expect(result).toEqual('baz');
           });

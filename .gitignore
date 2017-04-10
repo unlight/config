@@ -21,3 +21,4 @@ coverage/
 # misc
 !config/*.js
 npm-debug.log
+~*
