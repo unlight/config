@@ -11,7 +11,7 @@ const FAKE_CONFIG = {
     property: 'value',
     some: {
         nested: {
-            property: 'value',
+            property: 'nested-value',
         }
     }
 };
@@ -52,9 +52,13 @@ describe('ConfigPipe', () => {
             });
     }));
 
-    it('outputs config values', async(() => {
+    it('outputs property', async(() => {
         fixture.detectChanges();
         expect(fixture.nativeElement.querySelector('#property').innerHTML).toBe('value');
-        expect(fixture.nativeElement.querySelector('#property').innerHTML).toBe('value');
+    }));
+
+    it('outputs config values', async(() => {
+        fixture.detectChanges();
+        expect(fixture.nativeElement.querySelector('#nested-property').innerHTML).toBe('nested-value');
     }));
 });
