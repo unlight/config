@@ -119,6 +119,16 @@ describe('@nglibs/config:',
             expect(result).toEqual('baz');
           });
 
+          it('falsy zero key', () => {
+            let result = config.get(['falsy', 'zeroKey']);
+            expect(result).toBe(0);
+          });
+
+          it('falsy null key', () => {
+            let result = config.get(['falsy', 'nullKey']);
+            expect(result).toBeNull();
+          });
+
         });
       });
   });
