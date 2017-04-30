@@ -1,15 +1,18 @@
-import { Pipe } from '@angular/core';
+// angular
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
+
+// module
 import { ConfigService } from './config.service';
 
+@Injectable()
 @Pipe({
-	name: 'config',
+  name: 'config'
 })
-export class ConfigPipe {
+export class ConfigPipe implements PipeTransform {
+  constructor(private readonly config: ConfigService) {
+  }
 
-	constructor(private configService: ConfigService) {
-	}
-
-	transform(path: any): any {
-		return this.configService.get(path);
-	}
+  transform(value: string | Array<string>): any {
+    return this.config.getSettings(value);
+  }
 }

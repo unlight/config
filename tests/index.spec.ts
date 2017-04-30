@@ -1,7 +1,5 @@
 // angular
 import { TestBed } from '@angular/core/testing';
-import { BaseRequestOptions, Http, HttpModule } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 
 // module
@@ -16,8 +14,9 @@ export const testSettings = {
     'locale': 'en'
   },
   'falsy': {
-    'zeroKey': 0,
-    'nullKey': null as any
+    'zero': 0,
+    'null': null as any,
+    'emptyString': ''
   }
 };
 
@@ -29,19 +28,7 @@ export const testModuleConfig = (moduleOptions?: any) => {
   TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting())
     .configureTestingModule({
       imports: [
-        HttpModule,
         ConfigModule.forRoot(moduleOptions)
-      ],
-      providers: [
-        {
-          provide: Http,
-          useFactory: (mockBackend: MockBackend, options: BaseRequestOptions) => {
-            return new Http(mockBackend, options);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        },
-        MockBackend,
-        BaseRequestOptions
       ]
     });
 };

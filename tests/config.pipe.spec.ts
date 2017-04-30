@@ -1,64 +1,58 @@
-import { Component } from '@angular/core';
-import { async, TestBed, ComponentFixture } from '@angular/core/testing';
+// angular
+import { inject } from '@angular/core/testing';
+
+// module
+import { ConfigLoader, ConfigStaticLoader, ConfigPipe, ConfigService } from '../index';
 import { testSettings, testModuleConfig } from './index.spec';
-import { ConfigLoader, ConfigStaticLoader } from '../src/config.loader';
-import { ConfigPipe } from '../src/config.pipe';
-import { ConfigService } from '../src/config.service';
-import { HttpModule } from '@angular/http';
-import { ConfigModule } from '../index';
 
-const FAKE_CONFIG = {
-    property: 'value',
-    some: {
-        nested: {
-            property: 'nested-value',
-        }
-    }
-};
+describe('@ngx-config/core:',
+  () => {
+    beforeEach(() => {
+      const configFactory = () => new ConfigStaticLoader(testSettings);
 
-@Component({
-    selector: 'fake-component',
-    template: `
-  <span id="property">{{'property' | config}}</span>
-  <span id="nested-property">{{'some.nested.property' | config}}</span>
-  `
-})
-class FakeComponent {
-}
+      testModuleConfig({
+        provide: ConfigLoader,
+        useFactory: (configFactory)
+      });
+    });
 
-function getElement(fixture: any): Element {
-    return fixture.debugElement.nativeElement;
-}
+    describe('ConfigPipe',
+      () => {
+        it('is defined',
+          inject([ConfigService],
+            (config: ConfigService) => {
+              const pipe = new ConfigPipe(config);
 
-describe('ConfigPipe', () => {
+              expect(ConfigPipe).toBeDefined();
+              expect(pipe).toBeDefined();
+              expect(pipe instanceof ConfigPipe).toBeTruthy();
+            }));
 
-    let fixture: ComponentFixture<FakeComponent>;
+        it('should be able to get setting(s) using `key`',
+          inject([ConfigService],
+            (config: ConfigService) => {
+              config.loader.loadSettings()
+                .then(() => {
+                  const pipe = new ConfigPipe(config);
 
-    beforeEach(async(() => {
-        const configFactory = () => new ConfigStaticLoader(FAKE_CONFIG);
-        TestBed.configureTestingModule({
-            imports: [
-                HttpModule,
-                ConfigModule.forRoot({ provide: ConfigLoader, useFactory: (configFactory) })
-            ],
-            declarations: [FakeComponent],
-            providers: [
-                ConfigService,
-            ]
-        });
-        TestBed.compileComponents()
-            .then(() => {
-                fixture = TestBed.createComponent(FakeComponent);
-            });
-    }));
+                  let setting = pipe.transform(['system', 'applicationName']);
+                  expect(setting).toEqual('Mighty Mouse');
 
-    it('outputs property', async(() => {
-        fixture.detectChanges();
-        expect(fixture.nativeElement.querySelector('#property').innerHTML).toBe('value');
-    }));
+                  setting = pipe.transform('system.applicationUrl');
+                  expect(setting).toEqual('http://localhost:8000');
+                });
+            }));
 
-    it('outputs config values', async(() => {
-        fixture.detectChanges();
-        expect(fixture.nativeElement.querySelector('#nested-property').innerHTML).toBe('nested-value');
-    }));
-});
+        it('should throw if you provide an invalid `key` w/o `default value`',
+          inject([ConfigService],
+            (config: ConfigService) => {
+              config.loader.loadSettings()
+                .then(() => {
+                  const pipe = new ConfigPipe(config);
+
+                  expect(() => pipe.transform('layout'))
+                    .toThrowError('No setting found with the specified key [layout]!');
+                });
+            }));
+      });
+  });

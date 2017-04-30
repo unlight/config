@@ -16,20 +16,23 @@ export class ConfigService {
       .then((res: any) => this.settings = res);
   }
 
-  getSettings(group?: string, key?: string): any {
-    if (!group)
+  getSettings(key?: string | Array<string>, defaultValue?: any): any {
+    if (!key || (Array.isArray(key) && !key[0]))
       return this.settings;
 
-    if (!this.settings[group])
-      throw new Error(`No setting found with the specified group [${group}]!`);
+    if (!Array.isArray(key))
+      key = key.split('.');
 
-    if (!key)
-      return this.settings[group];
+    let result = key.reduce((acc: any, current: string) => acc && acc[current], this.settings);
 
-    if (!this.settings[group][key])
-      throw new Error(`No setting found with the specified group/key [${group}/${key}]!`);
+    if (result === undefined) {
+      result = defaultValue;
 
-    return this.settings[group][key];
+      if (result === undefined)
+        throw new Error(`No setting found with the specified key [${key.join('/')}]!`);
+    }
+
+    return result;
   }
 
   get(path: string, defaultValue?: any): any;
