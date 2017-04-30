@@ -1,23 +1,3 @@
-Fork of https://github.com/nglibs/config
----
-* Added `get` method, which can retrieve value at any deep:
-```ts
-get(path: string, defaultValue?: any): any;
-get(path: string[], defaultValue?: any): any;
-```
-* Added pipe config:
-```
-<span id="property">{{'some.setting' | config}}</span>
-```
-INSTALL
----
-```
-npm install --save ngx-config
-```
-
-ORIGINAL README
----
-
 # @nglibs/config [![Linux build](https://travis-ci.org/nglibs/config.svg?branch=master)](https://travis-ci.org/nglibs/config) [![Windows build](https://ci.appveyor.com/api/projects/status/github/nglibs/config?branch=master&svg=true)](https://ci.appveyor.com/project/nglibs/config) [![coverage](https://codecov.io/github/nglibs/config/coverage.svg?branch=master)](https://codecov.io/gh/nglibs/config) [![npm version](https://badge.fury.io/js/%40nglibs%2Fconfig.svg)](https://www.npmjs.com/package/@nglibs/config)
 
 > Please support this project by simply putting a Github star. Share this library with friends on Twitter and everywhere else you can.
