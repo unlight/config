@@ -198,6 +198,25 @@ export class AnyClass {
 }
 ```
 
+#### `whenConfigLoaded: Promise<void>`
+Readonly property, will be resolved when settings data will be loaded.  
+Useful when you need get config value in service which also uses `APP_INITIALIZER` somehow.
+In this case your code may look like:
+```ts
+{ provide: APP_INITIALIZER, useFactory: getPermissions, deps: [ConfigService], multi: true },
+```
+```ts
+export function getPermissions(configService: ConfigService) {
+    return async () => {
+    	// configService.getSettings() will return undefined here
+        await configService.whenConfigLoaded;
+        // Config settings is loaded, configService.getSettings() will not return undefined here
+        const permissionUrl = configService.getSettings('api.permissionUrl');
+        // Do request using permissionUrl value ...
+    };
+}
+```
+
 ## <a name="pipe"></a> Pipe
 `ConfigPipe` is used to get the application settings on the view level. Pipe can be appended to a **string** or to an
 **Array<string>**.
